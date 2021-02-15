@@ -46,20 +46,20 @@ public class Reservation {
 		return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 	}
 	
-	public String updateDates(Date checkIn, Date checkOut) {  //não vai ser mais void, vai retornar uma String (msg de erro)
+	public void updateDates(Date checkIn, Date checkOut) {  //método volta a ser void
 		
+		//agora caso ocorra algum erro, vamos lançar uma exceção (não vai retornar nada)
 		Date now = new Date();
 		if (checkIn.before(now) || checkOut.before(now)){
-			return "Error in reservation: Reservation dates for update must be future dates";
+			throw new IllegalArgumentException("Error in reservation: Reservation dates for update must be future dates"); //essa exceção é quando os argumentos que passamos para o método são inválidos
 		}
 		if (!checkOut.after(checkIn)) {
-			return "Error in reservation: Check-out date must be after Check-in date";
+			throw new IllegalArgumentException("Error in reservation: Check-out date must be after Check-in date");
 		}
 		
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
 		
-		return null;  //método pedi pra retornar alguma string, no caso de não der nenhuma das mensagens acima vamos retornar nulo dizendo que não deu nenhum erro
 	}
 		
 	@Override
