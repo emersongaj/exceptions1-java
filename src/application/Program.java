@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Scanner;
 
 import model.entities.Reservation;
+import model.exceptions.DomainException;
 
 public class Program {
 
@@ -44,22 +45,27 @@ public class Program {
 		catch(ParseException e)	{
 			System.out.println("Invalid date format");
 		}
-		catch(IllegalArgumentException e)	{
-			System.out.println("Error in reservation: " + e.getMessage());  //getMessage é a mensagem que coloquei lá na classe Reservation
+		catch(DomainException e)	{
+			System.out.println("Error in reservation: " + e.getMessage());  
 		}
-			
+		catch(RuntimeException e)	{   //qualquer outra exceção, exemplo, entrar com string no número do quarto
+			System.out.println("Unexpected error");  
+		}
+		
+		
 		sc.close();
-
+		/*
+		 * Colocar no github
+		 * 
+		 * Comandos: git status //verifica se tem alguma mudança no stagend pra ser
+		 * commitada (aparece em vermelho o que foi modificado) git add . //jogar na
+		 * área de staged git commit -m "Bad Solution" git push //jogar no github
+		 * 
+		 * 
+		 * 
+		 * 
+		 */
+		
 	}
-/*
- * Colocar no github
- * 
- * Comandos: git status //verifica se tem alguma mudança no stagend pra ser
- * commitada (aparece em vermelho o que foi modificado) git add . //jogar na
- * área de staged git commit -m "Bad Solution" git push //jogar no github
- * 
- * 
- * 
- * 
- */
 }
+

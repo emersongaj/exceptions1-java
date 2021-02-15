@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import model.exceptions.DomainException;
+
 public class Reservation {
 	
 	private Integer roomNumber;
@@ -12,7 +14,11 @@ public class Reservation {
 	
 	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	
-	public Reservation(Integer roomNumber, Date checkOut, Date checkIn) {
+	public Reservation(Integer roomNumber, Date checkOut, Date checkIn) throws DomainException {
+		if (!checkOut.after(checkIn)) {
+			throw new DomainException("Error in reservation: Check-out date must be after Check-in date");
+		}
+		
 		this.roomNumber = roomNumber;
 		this.checkOut = checkOut;
 		this.checkIn = checkIn;
@@ -45,16 +51,17 @@ public class Reservation {
 		//convertendo milisegundos para dias
 		return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 	}
-	
-	public void updateDates(Date checkIn, Date checkOut) {  //método volta a ser void
+													        //propagando
+	public void updateDates(Date checkIn, Date checkOut) throws DomainException{  //método volta a ser void
 		
 		//agora caso ocorra algum erro, vamos lançar uma exceção (não vai retornar nada)
+		//nós não vamos tratar a exceção aqui no método e sim lançar a exceção. O tratamento vai ser no programa principal através do Catch
 		Date now = new Date();
 		if (checkIn.before(now) || checkOut.before(now)){
-			throw new IllegalArgumentException("Error in reservation: Reservation dates for update must be future dates"); //essa exceção é quando os argumentos que passamos para o método são inválidos
+			throw new DomainException("Error in reservation: Reservation dates for update must be future dates"); //essa exceção é quando os argumentos que passamos para o método são inválidos
 		}
 		if (!checkOut.after(checkIn)) {
-			throw new IllegalArgumentException("Error in reservation: Check-out date must be after Check-in date");
+			throw new DomainException("Error in reservation: Check-out date must be after Check-in date");
 		}
 		
 		this.checkIn = checkIn;
